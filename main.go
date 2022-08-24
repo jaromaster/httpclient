@@ -7,6 +7,9 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
+
+	ct "github.com/daviddengcn/go-colortext"
 )
 
 func main() {
@@ -49,12 +52,13 @@ func main() {
 		log.Fatal("invalid method")
 	}
 
-	// send request
+	// send request and measure response time
+	start_time := time.Now().UnixMilli()
 	res := SendRequest(request)
-
-	// handle response (print status, response body, ...)
 	resData, _ := io.ReadAll(res.Body)
+	elapsed_time := time.Now().UnixMilli() - start_time
 
+	// write to file
 	if len(output_file) > 0 {
 		file, err := os.Create(output_file)
 		if err != nil {
@@ -64,7 +68,20 @@ func main() {
 		file.Close()
 	}
 
+	// color status
+	fmt.Print("status: ")
+	if res.StatusCode >= 200 && res.StatusCode < 300 {
+		ct.Foreground(ct.Green, false)
+	} else if res.StatusCode >= 300 && res.StatusCode < 400 {
+		ct.Foreground(ct.Yellow, false)
+	} else {
+		ct.Foreground(ct.Red, false)
+	}
 	fmt.Println(res.StatusCode)
+	ct.ResetColor()
+
+	// output
+	fmt.Println("response time:", elapsed_time, "ms")
 	fmt.Println(res.Header)
 	fmt.Println(string(resData))
 }
