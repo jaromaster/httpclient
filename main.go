@@ -9,37 +9,44 @@ import (
 )
 
 func main() {
-	// syntax:  httpclient method url [data]
+	// syntax:  httpclient method url ["data"]
 
 	// parse args
 	if len(os.Args) < 3 {
 		log.Fatal("invalid syntax")
 	}
-
 	method := os.Args[1]
 	url := os.Args[2]
+	data := ""
 
-	// TODO setup (cookies, auth, header)
+	if len(os.Args) >= 4 {
+		data = os.Args[3]
+	}
 
-	// execute request
-	var res http.Response
+	// TODO handle cookies, auth, header
+
+	// prepare request
+	var request http.Request
 	switch method {
 	case "get":
-		res = Get(url)
+		request = PrepareRequest("GET", url, data)
 	case "post":
-		data := os.Args[3]
-		res = Post(url, "application/json", data)
+		request = PrepareRequest("POST", url, data)
 	case "put":
-		data := os.Args[3]
-		res = Put(url, "application/json", data)
+		request = PrepareRequest("PUT", url, data)
 	case "delete":
-		res = Delete(url)
+		request = PrepareRequest("DELETE", url, data)
 	default:
 		log.Fatal("invalid method")
 	}
 
-	// handle response
-	data, _ := io.ReadAll(res.Body)
+	// send request
+	res := SendRequest(request)
+	fmt.Println(res.StatusCode)
+	fmt.Println(res.Header)
 
-	fmt.Println(string(data))
+	// handle response (print status, response body, ...)
+	resData, _ := io.ReadAll(res.Body)
+
+	fmt.Println(string(resData))
 }

@@ -6,55 +6,27 @@ import (
 	"net/http"
 )
 
-// http GET, return response
-func Get(url string) http.Response {
-	res, err := http.Get(url)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return *res
-}
-
-// http POST, return response
-func Post(url string, contentType string, data string) http.Response {
+// prepare http request
+func PrepareRequest(method string, url string, data string) http.Request {
 	buffer := bytes.NewBuffer([]byte(data))
 
-	res, err := http.Post(url, contentType, buffer)
+	req, err := http.NewRequest(method, url, buffer)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return *res
+	return *req
 }
 
-// http PUT, return response
-func Put(url string, contentType string, data string) http.Response {
-	buffer := bytes.NewBuffer([]byte(data))
+// prepare http request with header
 
-	req, err := http.NewRequest(http.MethodPut, url, buffer)
-	if err != nil {
-		log.Fatal(err)
-	}
+// prepare http request with cookies
+
+// send http request, return response
+func SendRequest(req http.Request) http.Response {
 
 	client := http.Client{}
-	res, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return *res
-}
-
-// http DELETE, return response
-func Delete(url string) http.Response {
-	req, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	client := http.Client{}
-	res, err := client.Do(req)
+	res, err := client.Do(&req)
 	if err != nil {
 		log.Fatal(err)
 	}
