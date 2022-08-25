@@ -30,9 +30,9 @@ func SetHeader(req http.Request, header string) http.Request {
 }
 
 // prepare http request with cookies
-func SetCookies(res http.Request, cookies string) http.Request {
-	res.Header.Set("Cookie", cookies)
-	return res
+func SetCookies(req http.Request, cookies string) http.Request {
+	req.Header.Set("Cookie", cookies)
+	return req
 }
 
 // send http request, return response
