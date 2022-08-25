@@ -43,6 +43,14 @@ func main() {
 		}
 	}
 
+	silent := false
+	for _, arg := range os.Args {
+		if strings.HasPrefix(arg, "--silent") {
+			silent = true
+			break
+		}
+	}
+
 	// TODO handle auth, header
 
 	// prepare request
@@ -89,11 +97,14 @@ func main() {
 	} else {
 		ct.Foreground(ct.Red, false)
 	}
-	fmt.Println(res.StatusCode)
+	fmt.Println(res.Status)
 	ct.ResetColor()
 
-	// output
 	fmt.Println("response time:", elapsed_time, "ms")
+
+	if silent {
+		return
+	}
 	fmt.Println(res.Header)
 	fmt.Println(string(resData))
 }
