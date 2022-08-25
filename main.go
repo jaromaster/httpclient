@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"os"
 	"time"
-
-	ct "github.com/daviddengcn/go-colortext"
 )
 
 func main() {
@@ -68,23 +66,18 @@ func main() {
 		file.Close()
 	}
 
-	// color status
-	fmt.Print("status: ")
-	if res.StatusCode >= 200 && res.StatusCode < 300 {
-		ct.Foreground(ct.Green, false)
-	} else if res.StatusCode >= 300 && res.StatusCode < 400 {
-		ct.Foreground(ct.Yellow, false)
-	} else {
-		ct.Foreground(ct.Red, false)
-	}
-	fmt.Println(res.Status)
-	ct.ResetColor()
-
-	fmt.Println("response time:", elapsed_time, "ms")
+	// status and time
+	PrintStatus(res.StatusCode, res.Status)
+	PrintResponseTime(elapsed_time)
 
 	if silent {
 		return
 	}
-	fmt.Println(res.Header)
-	fmt.Println(string(resData))
+	// response header
+	fmt.Println()
+	PrintHeader(res.Header)
+	fmt.Println()
+
+	// response body
+	PrintData(string(resData))
 }
