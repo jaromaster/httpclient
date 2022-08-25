@@ -51,6 +51,14 @@ func main() {
 		}
 	}
 
+	header := ""
+	for _, arg := range os.Args {
+		if strings.HasPrefix(arg, "--header=") {
+			header = arg[9:]
+			break
+		}
+	}
+
 	// TODO handle auth, header
 
 	// prepare request
@@ -70,6 +78,9 @@ func main() {
 
 	if len(cookies) > 0 {
 		request = SetCookies(request, cookies)
+	}
+	if len(header) > 0 {
+		request = SetHeader(request, header)
 	}
 
 	// send request and measure response time
