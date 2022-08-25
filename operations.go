@@ -23,7 +23,7 @@ func PrepareRequest(method string, url string, data string) http.Request {
 func SetHeader(req http.Request, header string) http.Request {
 	for _, line := range strings.Split(header, `\n`) {
 		key_val := strings.SplitN(line, ":", 2)
-		req.Header.Add(key_val[0], key_val[1])
+		req.Header.Add(strings.TrimSpace(key_val[0]), strings.TrimSpace(key_val[1]))
 	}
 
 	return req

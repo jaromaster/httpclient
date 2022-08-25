@@ -23,8 +23,11 @@ func main() {
 	method := os.Args[1]
 	url := os.Args[2]
 	data := ""
-	if len(os.Args) >= 4 {
-		data = os.Args[3]
+	for _, arg := range os.Args {
+		if strings.HasPrefix(arg, "--data=") {
+			data = arg[7:]
+			break
+		}
 	}
 
 	output_file := ""
