@@ -76,8 +76,8 @@ func main() {
 	// response header
 	fmt.Println()
 	PrintHeader(res.Header)
-	fmt.Println()
 
 	// response body
+	fmt.Println()
 	PrintData(string(resData))
 }
