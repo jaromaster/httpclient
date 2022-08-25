@@ -6,63 +6,29 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 
 	ct "github.com/daviddengcn/go-colortext"
 )
 
 func main() {
-
 	// parse args
 	if os.Args[1] == "help" {
 		PrintHelp()
 		return
 	}
 
+	// always set
 	method := os.Args[1]
 	url := os.Args[2]
-	data := ""
-	for _, arg := range os.Args {
-		if strings.HasPrefix(arg, "--data=") {
-			data = arg[7:]
-			break
-		}
-	}
 
-	output_file := ""
-	for _, arg := range os.Args {
-		if strings.HasPrefix(arg, "--save=") {
-			output_file = arg[7:]
-			break
-		}
-	}
-
-	cookies := ""
-	for _, arg := range os.Args {
-		if strings.HasPrefix(arg, "--cookies=") {
-			cookies = arg[10:]
-			break
-		}
-	}
-
-	silent := false
-	for _, arg := range os.Args {
-		if strings.HasPrefix(arg, "--silent") {
-			silent = true
-			break
-		}
-	}
-
-	header := ""
-	for _, arg := range os.Args {
-		if strings.HasPrefix(arg, "--header=") {
-			header = arg[9:]
-			break
-		}
-	}
-
-	// TODO handle auth, header
+	// optional flags
+	argsMap := CreateFlagsFromArgs(os.Args)
+	data := argsMap["--data"]
+	output_file := argsMap["--save"]
+	cookies := argsMap["--cookies"]
+	silent := len(argsMap["--silent"]) > 0
+	header := argsMap["--header"]
 
 	// prepare request
 	var request http.Request
