@@ -13,16 +13,16 @@ import (
 )
 
 func main() {
-	// syntax:  httpclient method url ["data"] [--save="output-file-path"]
 
 	// parse args
-	if len(os.Args) < 3 {
-		log.Fatal("invalid syntax")
+	if os.Args[1] == "help" {
+		PrintHelp()
+		return
 	}
+
 	method := os.Args[1]
 	url := os.Args[2]
 	data := ""
-
 	if len(os.Args) >= 4 {
 		data = os.Args[3]
 	}
@@ -57,7 +57,7 @@ func main() {
 	case "delete":
 		request = PrepareRequest("DELETE", url, data)
 	default:
-		log.Fatal("invalid method")
+		PrintHelp()
 	}
 
 	if len(cookies) > 0 {
