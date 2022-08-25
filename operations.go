@@ -21,6 +21,10 @@ func PrepareRequest(method string, url string, data string) http.Request {
 // prepare http request with header
 
 // prepare http request with cookies
+func SetCookies(res http.Request, cookies string) http.Request {
+	res.Header.Set("Cookie", cookies)
+	return res
+}
 
 // send http request, return response
 func SendRequest(req http.Request) http.Response {

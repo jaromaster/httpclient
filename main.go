@@ -31,11 +31,19 @@ func main() {
 	for _, arg := range os.Args {
 		if strings.HasPrefix(arg, "--save=") {
 			output_file = arg[7:]
+			break
 		}
 	}
-	fmt.Println(output_file)
 
-	// TODO handle cookies, auth, header
+	cookies := ""
+	for _, arg := range os.Args {
+		if strings.HasPrefix(arg, "--cookies=") {
+			cookies = arg[10:]
+			break
+		}
+	}
+
+	// TODO handle auth, header
 
 	// prepare request
 	var request http.Request
@@ -50,6 +58,10 @@ func main() {
 		request = PrepareRequest("DELETE", url, data)
 	default:
 		log.Fatal("invalid method")
+	}
+
+	if len(cookies) > 0 {
+		request = SetCookies(request, cookies)
 	}
 
 	// send request and measure response time
