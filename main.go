@@ -27,6 +27,7 @@ func main() {
 	cookies := argsMap["--cookies"]
 	silent := len(argsMap["--silent"]) > 0
 	header := argsMap["--header"]
+	auth := argsMap["--auth"]
 
 	// prepare request
 	var request http.Request
@@ -48,6 +49,9 @@ func main() {
 	}
 	if len(header) > 0 {
 		request = SetHeader(request, header)
+	}
+	if len(auth) > 0 {
+		request = SetAuth(request, auth)
 	}
 
 	// send request and measure response time

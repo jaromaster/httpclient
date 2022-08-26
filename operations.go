@@ -35,6 +35,12 @@ func SetCookies(req http.Request, cookies string) http.Request {
 	return req
 }
 
+// handle auth
+func SetAuth(req http.Request, auth string) http.Request {
+	req.Header.Set("Authorization", auth)
+	return req
+}
+
 // send http request, return response
 func SendRequest(req http.Request) http.Response {
 
