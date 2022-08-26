@@ -28,6 +28,7 @@ func main() {
 	silent := len(argsMap["--silent"]) > 0
 	header := argsMap["--header"]
 	auth := argsMap["--auth"]
+	user_agent := argsMap["--useragent"]
 
 	// prepare request
 	var request http.Request
@@ -42,6 +43,7 @@ func main() {
 		request = PrepareRequest("DELETE", url, data)
 	default:
 		PrintHelp()
+		return
 	}
 
 	if len(cookies) > 0 {
@@ -52,6 +54,9 @@ func main() {
 	}
 	if len(auth) > 0 {
 		request = SetAuth(request, auth)
+	}
+	if len(user_agent) > 0 {
+		request = SetUserAgent(request, user_agent)
 	}
 
 	// send request and measure response time

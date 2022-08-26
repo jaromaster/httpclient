@@ -41,6 +41,12 @@ func SetAuth(req http.Request, auth string) http.Request {
 	return req
 }
 
+// config user agent
+func SetUserAgent(req http.Request, user_agent string) http.Request {
+	req.Header.Set("User-Agent", user_agent)
+	return req
+}
+
 // send http request, return response
 func SendRequest(req http.Request) http.Response {
 
